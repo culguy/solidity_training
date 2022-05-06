@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.0;
 
-contract Solid {
+contract SolidCoin {
     address public tosin;
     mapping (address => uint) public balances;
 
-    event sent(address from, address to, uint amount);
+    event TranssactionSuccessful(address sender, address receiver, uint amount);
 
     constructor() {
         tosin = msg.sender;
@@ -16,17 +16,17 @@ contract Solid {
         balances[receiver] += amount;
     }
 
-    error InsufficientBalance(uint requested, uint available );
+    error TransactionFailed(uint amountrequested, uint amountavailable );
 
     function send(address receiver, uint amount) public {
         if (amount > balances[msg.sender])
-            revert InsufficientBalance({
-                requested: amount,
-                availabe: balances[msg.sender]
+            revert TransactionFailed({
+                amountrequested: amount,
+                amountavailable: balances[msg.sender]
             });
         
         balances[msg.sender] -= amount;
         balances[receiver] += amount;
-        emit sent(msg.sender, receiver, amount);
+        emit TranssactionSuccessful(msg.sender, receiver, amount);
     }
 }
